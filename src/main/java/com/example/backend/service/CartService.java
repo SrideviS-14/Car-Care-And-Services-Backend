@@ -3,7 +3,6 @@ package com.example.backend.service;
 import com.example.backend.model.AppUser;
 import com.example.backend.model.Services;
 import com.example.backend.repository.ServiceRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,19 +30,29 @@ public class CartService {
 
     public Iterable<Services> addServiceToCart(Integer userId, Integer service_id) {
         Optional<Services> service = serviceRepository.findById(service_id);
-
-        if (service.isPresent()) {
-            if (!userCarts.getOrDefault(userId, new ArrayList<>()).contains(service.get())) {
-                userCarts.computeIfAbsent(userId, k -> new ArrayList<>()).add(service.get());
+        boolean flag = false;
+        for(Services services: getServicesInCart(userId))
+        {
+            if(services.getService_ID() == service_id)
+            {
+                flag = true;
             }
         }
-
+        if (!flag) {
+            userCarts.computeIfAbsent(userId, k -> new ArrayList<>()).add(service.get());
+        }
         return userCarts.getOrDefault(userId, new ArrayList<>());
     }
 
     public Iterable<Services> removeServiceFromCart(Integer userId, Integer service_id) {
         Optional<Services> service = serviceRepository.findById(service_id);
-        userCarts.getOrDefault(userId, new ArrayList<>()).remove(service.orElse(null));
+        for(Services services: getServicesInCart(userId))
+        {
+            if(services.getService_ID() == service_id)
+            {
+                userCarts.computeIfAbsent(userId, k -> new ArrayList<>()).remove(services);
+            }
+        }
         return userCarts.getOrDefault(userId, new ArrayList<>());
     }
 

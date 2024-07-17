@@ -24,15 +24,6 @@ public class CartController {
     public CartController(CartService cartService) {
         this.cartService = cartService;
     }
-    @GetMapping("/")
-    public ResponseEntity<Object> profile(Authentication auth) {
-        var response = new HashMap<String, Object>();
-        response.put("Username", auth.getDetails());
-
-        var appUser = appUserRepository.findByUserName(auth.getName());
-        response.put("User", appUser);
-        return ResponseEntity.ok(response);
-    }
 
     @PostMapping("/addService")
     public Iterable<Services> addServiceToCart(@RequestBody Integer service_id) {
@@ -43,7 +34,6 @@ public class CartController {
     @PostMapping("/removeService")
     public Iterable<Services> removeServiceFromCart(@RequestBody Integer service_id) {
         Integer userId = cartService.getUserIdFromToken();
-        List<Services> servicesInCart = cartService.getServicesInCart(userId);
         return cartService.removeServiceFromCart(userId, service_id);
     }
 
