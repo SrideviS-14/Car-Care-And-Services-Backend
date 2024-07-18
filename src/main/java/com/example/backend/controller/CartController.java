@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cart")
+@CrossOrigin(origins = "*")
 public class CartController {
 
     @Autowired
@@ -46,6 +47,6 @@ public class CartController {
     @GetMapping("/getTotal")
     public String getTotal() {
         Integer userId = cartService.getUserIdFromToken();
-        return "Total: $" + cartService.getTotal(userId);
+        return "Total: ₹" + cartService.getTotal(userId);
     }
 }
