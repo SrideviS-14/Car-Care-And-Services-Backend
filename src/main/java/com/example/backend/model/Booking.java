@@ -23,16 +23,24 @@ public class Booking {
     private BigDecimal Package_Amount;
 
     @Column(name="Time_Period_In_Days")
-    private Date Time_Period_In_Days;
+    private int Time_Period_In_Days;
 
     @Column(name="Id")
-    private int UserID;
+    private int User_ID;
 
     @Column(name="Paid")
     private boolean Paid;
 
     @Column(name="IsActive")
     private boolean IsActive;
+
+    public int getUser_ID() {
+        return User_ID;
+    }
+
+    public void setUser_ID(int user_ID) {
+        User_ID = user_ID;
+    }
 
     public int getBooking_ID() {
         return Booking_ID;
@@ -66,21 +74,14 @@ public class Booking {
         Package_Amount = package_Amount;
     }
 
-    public Date getTime_Period_In_Days() {
+    public int getTime_Period_In_Days() {
         return Time_Period_In_Days;
     }
 
-    public void setTime_Period_In_Days(Date time_Period_In_Days) {
+    public void setTime_Period_In_Days(int time_Period_In_Days) {
         Time_Period_In_Days = time_Period_In_Days;
     }
 
-    public int getUserID() {
-        return UserID;
-    }
-
-    public void setUserID(int userID) {
-        UserID = userID;
-    }
 
     public boolean isPaid() {
         return Paid;

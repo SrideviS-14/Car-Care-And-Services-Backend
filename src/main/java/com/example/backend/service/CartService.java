@@ -69,8 +69,10 @@ public class CartService {
         return total;
     }
 
-    public void checkout(Integer userId) {
-        // Implement checkout logic here (e.g., process payment, clear cart, etc.)
-        // ...
+    public void addQuickService(List<Integer> serviceList) {
+        for(Integer serviceId: serviceList)
+        {
+            addServiceToCart(getUserIdFromToken(), serviceId);
+        }
     }
 }

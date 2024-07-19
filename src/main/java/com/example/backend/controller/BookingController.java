@@ -6,6 +6,8 @@ import com.example.backend.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/booking")
 @CrossOrigin(origins = "*")
@@ -20,7 +22,8 @@ public class BookingController {
     }
 
     @PostMapping("/book")
-    public Booking book(@RequestBody BookingDto bookingDto) {
+    public String book(@RequestBody BookingDto bookingDto) {
+        System.out.println(bookingDto.getService_Type());
         return bookingService.book(bookingDto);
     }
 

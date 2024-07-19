@@ -1,31 +1,23 @@
 package com.example.backend.model;
 
-
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PaymentDto {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Payment_ID;
-
+    @JsonProperty("Booking_ID")
     private int Booking_ID;
 
+    @JsonProperty("Payment_Type")
     private String Payment_Type;
 
+    @JsonProperty("Card_Holder_Name")
     private String Card_Holder_Name;
 
+    @JsonProperty("Card_Number")
     private String Card_Number;
 
+    @JsonProperty("Expiration_Date")
     private String Expiration_Date;
-
-    public int getPayment_ID() {
-        return Payment_ID;
-    }
-
-    public void setPayment_ID(int payment_ID) {
-        Payment_ID = payment_ID;
-    }
 
     public int getBooking_ID() {
         return Booking_ID;

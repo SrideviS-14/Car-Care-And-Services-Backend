@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,8 +47,14 @@ public class CartController {
     }
 
     @GetMapping("/getTotal")
-    public String getTotal() {
+    public BigDecimal getTotal() {
         Integer userId = cartService.getUserIdFromToken();
-        return "Total: ₹" + cartService.getTotal(userId);
+        return cartService.getTotal(userId);
+    }
+
+    @PostMapping("/addQuickService")
+    public String addQuickService(@RequestBody List<Integer> serviceList) {
+        cartService.addQuickService(serviceList);
+        return "Added Successfully";
     }
 }

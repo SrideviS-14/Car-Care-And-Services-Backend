@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,29 +11,33 @@ import java.sql.Date;
 
 public class BookingDto {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Booking_ID;
-
+    @JsonProperty("Service_Type")
     private String Service_Type;
 
+    @JsonProperty("Service_List")
     private String Service_List;
 
+    @JsonProperty("Package_Amount")
     private BigDecimal Package_Amount;
 
-    private Date Time_Period_In_Days;
+    @JsonProperty("Time_Period_In_Days")
+    private int Time_Period_In_Days;
 
-    private int UserID;
+    @JsonProperty("User_ID")
+    private int User_ID;
 
+    @JsonProperty("Paid")
     private boolean Paid;
 
+    @JsonProperty("IsActive")
     private boolean IsActive;
 
-    public int getBooking_ID() {
-        return Booking_ID;
+    public int getUser_ID() {
+        return User_ID;
     }
 
-    public void setBooking_ID(int booking_ID) {
-        Booking_ID = booking_ID;
+    public void setUser_ID(int user_ID) {
+        User_ID = user_ID;
     }
 
     public String getService_Type() {
@@ -59,21 +64,14 @@ public class BookingDto {
         Package_Amount = package_Amount;
     }
 
-    public Date getTime_Period_In_Days() {
+    public int getTime_Period_In_Days() {
         return Time_Period_In_Days;
     }
 
-    public void setTime_Period_In_Days(Date time_Period_In_Days) {
+    public void setTime_Period_In_Days(int time_Period_In_Days) {
         Time_Period_In_Days = time_Period_In_Days;
     }
 
-    public int getUserID() {
-        return UserID;
-    }
-
-    public void setUserID(int userID) {
-        UserID = userID;
-    }
 
     public boolean isPaid() {
         return Paid;
