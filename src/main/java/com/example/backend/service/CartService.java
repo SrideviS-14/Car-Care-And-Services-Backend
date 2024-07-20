@@ -1,7 +1,9 @@
 package com.example.backend.service;
 
 import com.example.backend.model.AppUser;
+import com.example.backend.model.Packages;
 import com.example.backend.model.Services;
+import com.example.backend.repository.PackageRepository;
 import com.example.backend.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -16,6 +18,9 @@ public class CartService {
 
     @Autowired
     ServiceRepository serviceRepository;
+
+    @Autowired
+    PackageRepository packageRepository;
 
     private final Map<Integer, List<Services>> userCarts = new HashMap<>();
 
@@ -45,15 +50,17 @@ public class CartService {
     }
 
     public Iterable<Services> removeServiceFromCart(Integer userId, Integer service_id) {
-        Optional<Services> service = serviceRepository.findById(service_id);
-        for(Services services: getServicesInCart(userId))
-        {
-            if(services.getService_ID() == service_id)
-            {
-                userCarts.computeIfAbsent(userId, k -> new ArrayList<>()).remove(services);
+        List<Services> servicesInCart = userCarts.getOrDefault(userId, new ArrayList<>());
+        Iterator<Services> iterator = servicesInCart.iterator();
+
+        // Iterate over the list
+        while (iterator.hasNext()) {
+            Services services = iterator.next();
+            if (services.getService_ID() == service_id) {
+                iterator.remove();  // Safely remove the element from the list
             }
         }
-        return userCarts.getOrDefault(userId, new ArrayList<>());
+        return servicesInCart;
     }
 
     public List<Services> getServicesInCart(Integer userId) {
@@ -70,9 +77,43 @@ public class CartService {
     }
 
     public void addQuickService(List<Integer> serviceList) {
-        for(Integer serviceId: serviceList)
-        {
-            addServiceToCart(getUserIdFromToken(), serviceId);
+        Integer userID = getUserIdFromToken();
+        List<Services> servicesInCart = new ArrayList<>(userCarts.getOrDefault(userID, new ArrayList<>()));
+        Iterator<Services> iterator = servicesInCart.iterator();
+        while (iterator.hasNext()) {
+            Services services = iterator.next();
+            removeServiceFromCart(userID, services.getService_ID());
+        }
+        for (Integer serviceId : serviceList) {
+            addServiceToCart(userID, serviceId);
         }
     }
+
+    public String buyPackage(int packageID) {
+        Integer userID = getUserIdFromToken();
+        List<Services> servicesInCart = new ArrayList<>(userCarts.getOrDefault(userID, new ArrayList<>()));
+        Iterator<Services> iterator = servicesInCart.iterator();
+        Optional<Packages> packages = packageRepository.findById(packageID);
+        String servicesList = packages.get().getService_List();
+        List<String> serviceList = List.of(servicesList.split(", "));
+
+        // Remove existing services from the cart
+        while (iterator.hasNext()) {
+            Services services = iterator.next();
+            removeServiceFromCart(userID, services.getService_ID());
+        }
+
+        // Add services from the package to the cart
+        for (String service : serviceList) {
+            for (Services existingService : serviceRepository.findAll()) {
+                if (existingService.getService_Name().equals(service)) {
+                    addServiceToCart(userID, existingService.getService_ID());
+                    break;// Exit the inner loop once the service is added
+                }
+            }
+        }
+
+        return "Added Successfully";
+    }
+
 }
