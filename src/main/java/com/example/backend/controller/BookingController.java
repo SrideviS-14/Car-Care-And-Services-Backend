@@ -22,7 +22,7 @@ public class BookingController {
     }
 
     @PostMapping("/book")
-    public String book(@RequestBody BookingDto bookingDto) {
+    public Integer book(@RequestBody BookingDto bookingDto) {
         System.out.println(bookingDto.getService_Type());
         return bookingService.book(bookingDto);
     }

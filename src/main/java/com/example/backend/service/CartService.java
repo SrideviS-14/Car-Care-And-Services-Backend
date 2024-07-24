@@ -35,6 +35,15 @@ public class CartService {
 
     public Iterable<Services> addServiceToCart(Integer userId, Integer service_id) {
         Optional<Services> service = serviceRepository.findById(service_id);
+        List<Services> servicesInCart = new ArrayList<>(userCarts.getOrDefault(userId, new ArrayList<>()));
+        for(Services services: servicesInCart)
+        {
+            if(!(services.isService()))
+            {
+                // Remove existing services from the cart
+                removeServiceFromCart(userId, services.getService_ID());
+            }
+        }
         boolean flag = false;
         for(Services services: getServicesInCart(userId))
         {
@@ -91,28 +100,15 @@ public class CartService {
 
     public String buyPackage(int packageID) {
         Integer userID = getUserIdFromToken();
+        Optional<Services> service = serviceRepository.findById(packageID);
         List<Services> servicesInCart = new ArrayList<>(userCarts.getOrDefault(userID, new ArrayList<>()));
         Iterator<Services> iterator = servicesInCart.iterator();
-        Optional<Packages> packages = packageRepository.findById(packageID);
-        String servicesList = packages.get().getService_List();
-        List<String> serviceList = List.of(servicesList.split(", "));
-
         // Remove existing services from the cart
         while (iterator.hasNext()) {
             Services services = iterator.next();
             removeServiceFromCart(userID, services.getService_ID());
         }
-
-        // Add services from the package to the cart
-        for (String service : serviceList) {
-            for (Services existingService : serviceRepository.findAll()) {
-                if (existingService.getService_Name().equals(service)) {
-                    addServiceToCart(userID, existingService.getService_ID());
-                    break;// Exit the inner loop once the service is added
-                }
-            }
-        }
-
+        addServiceToCart(userID, service.get().getService_ID());
         return "Added Successfully";
     }
 

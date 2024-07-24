@@ -23,6 +23,9 @@ public class Services
     @Column(name="Description")
     private String Description;
 
+    @Column(name="IsService")
+    private boolean IsService;
+
     public int getService_ID() {
         return Service_ID;
     }
@@ -53,5 +56,13 @@ public class Services
 
     public void setDescription(String description) {
         Description = description;
+    }
+
+    public boolean isService() {
+        return IsService;
+    }
+
+    public void setService(boolean service) {
+        IsService = service;
     }
 }

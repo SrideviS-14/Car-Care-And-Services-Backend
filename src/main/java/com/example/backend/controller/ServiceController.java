@@ -27,9 +27,18 @@ public class ServiceController {
         return serviceService.addService(service);
     }
 
-    @DeleteMapping("/deleteService")
-    public Iterable<Services> deleteService(@RequestBody Integer service_id) {
+    @DeleteMapping("/deleteService/{service_ID}")
+    public Iterable<Services> deleteService(@PathVariable Integer service_id) {
         return serviceService.deleteService(service_id);
     }
 
+    @PutMapping("/updateService")
+    public String updateService(@RequestBody Services services){
+        return serviceService.updateService(services);
+    }
+
+    @GetMapping("/getAllPackages")
+    public Iterable<Services> getAllPackages() {
+        return serviceService.getAllPackages();
+    }
 }

@@ -28,7 +28,7 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public String book(BookingDto bookingDto) {
+    public Integer book(BookingDto bookingDto) {
         Booking booking = new Booking();
         booking.setService_Type(bookingDto.getService_Type());
         booking.setService_List(bookingDto.getService_List());
@@ -38,7 +38,7 @@ public class BookingService {
         booking.setUser_ID(bookingDto.getUser_ID());
         booking.setTime_Period_In_Days(bookingDto.getTime_Period_In_Days());
         bookingRepository.save(booking);
-        return "Added Successfully";
+        return booking.getBooking_ID();
     }
 
 }
