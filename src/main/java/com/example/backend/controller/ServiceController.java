@@ -17,6 +17,11 @@ public class ServiceController {
     @Autowired
     ServiceService serviceService;
 
+    @GetMapping("/getAllServicesAndPackages")
+    public Iterable<Services> getAllServicesAndPackages() {
+        return serviceService.getAllServicesAndPackages();
+    }
+
     @GetMapping("/getAllServices")
     public Iterable<Services> getAllServices() {
         return serviceService.getAllServices();

@@ -27,4 +27,8 @@ public class BookingController {
         return bookingService.book(bookingDto);
     }
 
+    @PutMapping("/updateBookingPayment/{booking_ID}")
+    public String updateBookingPayment(@PathVariable int booking_ID){
+        return bookingService.updateBookingPayment(booking_ID);
+    }
 }

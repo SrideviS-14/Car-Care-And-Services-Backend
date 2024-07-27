@@ -9,69 +9,80 @@ public class Car {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Car_Number")
-    private int Car_Number;
+    private int car_ID;
 
-    @Column(name="Car_Type")
-    private String Car_Type;
+    @Column(name = "car_Number")
+    private String car_Number;
 
-    @Column(name="Car_Model")
-    private String Car_Model;
+    @Column(name="car_Type")
+    private String car_Type;
 
-    @Column(name="Car_Color")
-    private String Car_Color;
+    @Column(name="car_Model")
+    private String car_Model;
 
-    @Column(name="Car_Company")
-    private String Car_Company;
+    @Column(name="car_Color")
+    private String car_Color;
 
-    @Column(name="Id")
-    private int UserID;
+    @Column(name="car_Company")
+    private String car_Company;
 
-    public String getCar_Type() {
-        return Car_Type;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    private AppUser appUser;
+
+    public int getCar_ID() {
+        return car_ID;
     }
 
-    public void setCar_Type(String car_Type) {
-        Car_Type = car_Type;
+    public void setCar_ID(int Car_ID) {
+        car_ID = Car_ID;
+    }
+
+    public String getCar_Type() {
+        return car_Type;
+    }
+
+    public void setCar_Type(String Car_Type) {
+        car_Type = Car_Type;
     }
 
     public String getCar_Model() {
-        return Car_Model;
+        return car_Model;
     }
 
-    public void setCar_Model(String car_Model) {
-        Car_Model = car_Model;
+    public void setCar_Model(String Car_Model) {
+        car_Model = Car_Model;
     }
 
     public String getCar_Color() {
-        return Car_Color;
+        return car_Color;
     }
 
-    public void setCar_Color(String car_Color) {
-        Car_Color = car_Color;
+    public void setCar_Color(String Car_Color) {
+        car_Color = Car_Color;
     }
 
     public String getCar_Company() {
-        return Car_Company;
+        return car_Company;
     }
 
-    public void setCar_Company(String car_Company) {
-        Car_Company = car_Company;
+    public void setCar_Company(String Car_Company) {
+        car_Company = Car_Company;
     }
 
-    public int getCar_Number() {
-        return Car_Number;
+    public String getCar_Number() {
+        return car_Number;
     }
 
-    public void setCar_Number(int car_Number) {
-        Car_Number = car_Number;
+    public void setCar_Number(String Car_Number) {
+        car_Number = Car_Number;
     }
 
-    public int getUserID() {
-        return UserID;
+    public AppUser getAppUser() {
+        return appUser;
     }
 
-    public void setUserID(int userID) {
-        UserID = userID;
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
     }
 }

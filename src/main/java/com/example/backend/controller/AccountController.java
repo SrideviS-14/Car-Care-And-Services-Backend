@@ -4,6 +4,7 @@ import com.example.backend.model.AppUser;
 import com.example.backend.model.LoginDto;
 import com.example.backend.model.RegisterDto;
 import com.example.backend.repository.AppUserRepository;
+import com.example.backend.service.EmailService;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ public class AccountController {
     private AppUserRepository appUserRepository;
 
     @Autowired
+    EmailService emailService;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
@@ -76,7 +80,7 @@ public class AccountController {
                 return ResponseEntity.badRequest().body("Email address already exists");
             }
             appUserRepository.save(appUser);
-
+            emailService.sendEmail(appUser.getEmail(), "Registration Successful", "Your Registration into WheelsUp was Successfully");
             String jwtToken = createJwtToken(appUser);
 
             var response = new HashMap<String, Object>();
@@ -98,7 +102,7 @@ public class AccountController {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer(jwtIssuer)
                 .issuedAt(now)
-                .expiresAt(now.plusSeconds(24*3600))
+                .expiresAt(now.plusSeconds(2*3600))
                 .subject(appUser.getUserName())
                 .claim("role", appUser.getRole())
                 .build();
@@ -131,7 +135,6 @@ public class AccountController {
                     )
             );
             AppUser appUser = appUserRepository.findByUserName(loginDto.getUsername());
-
             String jwtToken = createJwtToken(appUser);
 
             var response = new HashMap<String, Object>();
@@ -157,7 +160,12 @@ public class AccountController {
 
         var appUser = appUserRepository.findByUserName(auth.getName());
         response.put("User", appUser);
+        response.put("UserId", appUser.getId());
          return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/getAllUsers")
+    public Iterable<AppUser> getAllUsers() {
+        return appUserRepository.findAll();
+    }
 }

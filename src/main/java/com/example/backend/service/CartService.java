@@ -3,6 +3,7 @@ package com.example.backend.service;
 import com.example.backend.model.AppUser;
 import com.example.backend.model.Packages;
 import com.example.backend.model.Services;
+import com.example.backend.repository.AppUserRepository;
 import com.example.backend.repository.PackageRepository;
 import com.example.backend.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,19 +23,21 @@ public class CartService {
     @Autowired
     PackageRepository packageRepository;
 
+    @Autowired
+    AppUserRepository appUserRepository;
+    
     private final Map<Integer, List<Services>> userCarts = new HashMap<>();
 
-    public Integer getUserIdFromToken() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            AppUser userDetails = (AppUser) authentication.getPrincipal();
-            return userDetails.getId();
-        }
-        return null;
+    public int getUserIdFromToken() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        AppUser appUser = appUserRepository.findByUserName(username);
+        return appUser.getId();
     }
 
     public Iterable<Services> addServiceToCart(Integer userId, Integer service_id) {
         Optional<Services> service = serviceRepository.findById(service_id);
+        System.out.println(userId);
         List<Services> servicesInCart = new ArrayList<>(userCarts.getOrDefault(userId, new ArrayList<>()));
         for(Services services: servicesInCart)
         {
@@ -112,4 +115,8 @@ public class CartService {
         return "Added Successfully";
     }
 
+    public void emptyCart(int userID){
+        System.out.println(userID);
+        userCarts.remove(userID);
+    }
 }

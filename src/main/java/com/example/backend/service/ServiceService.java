@@ -53,4 +53,8 @@ public class ServiceService {
         }
         return packages;
     }
+
+    public Iterable<Services> getAllServicesAndPackages() {
+        return serviceRepository.findAll();
+    }
 }

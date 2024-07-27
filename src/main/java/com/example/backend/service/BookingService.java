@@ -12,8 +12,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -23,6 +25,9 @@ public class BookingService {
 
     @Autowired
     ServiceRepository serviceRepository;
+
+    @Autowired
+    CartService cartService;
 
     public Iterable<Booking> getAllBookings() {
         return bookingRepository.findAll();
@@ -38,7 +43,14 @@ public class BookingService {
         booking.setUser_ID(bookingDto.getUser_ID());
         booking.setTime_Period_In_Days(bookingDto.getTime_Period_In_Days());
         bookingRepository.save(booking);
+        cartService.emptyCart(bookingDto.getUser_ID());
         return booking.getBooking_ID();
     }
 
+    public String updateBookingPayment(int bookingId) {
+        Optional<Booking> booking = bookingRepository.findById(bookingId);
+        booking.get().setPaid(true);
+        bookingRepository.save(booking.orElse(null));
+        return "Changed Successfully";
+    }
 }
