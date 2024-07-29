@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -12,9 +13,6 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Booking_ID;
-
-    @Column(name="Service_Type")
-    private String Service_Type;
 
     @Column(name="Service_List")
     private String Service_List;
@@ -31,8 +29,11 @@ public class Booking {
     @Column(name="Paid")
     private boolean Paid;
 
-    @Column(name="IsActive")
-    private boolean IsActive;
+    @Column(name="DateOfBooking")
+    private Date DateOfBooking;
+
+    @Column(name="Status")
+    private String Status;
 
     public int getUser_ID() {
         return User_ID;
@@ -40,22 +41,6 @@ public class Booking {
 
     public void setUser_ID(int user_ID) {
         User_ID = user_ID;
-    }
-
-    public int getBooking_ID() {
-        return Booking_ID;
-    }
-
-    public void setBooking_ID(int booking_ID) {
-        Booking_ID = booking_ID;
-    }
-
-    public String getService_Type() {
-        return Service_Type;
-    }
-
-    public void setService_Type(String service_Type) {
-        Service_Type = service_Type;
     }
 
     public String getService_List() {
@@ -91,11 +76,28 @@ public class Booking {
         Paid = paid;
     }
 
-    public boolean isActive() {
-        return IsActive;
+    public Date getDateOfBooking() {
+        return DateOfBooking;
     }
 
-    public void setActive(boolean active) {
-        IsActive = active;
+    public void setDateOfBooking(Date dateOfBooking) {
+        DateOfBooking = dateOfBooking;
     }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
+    }
+    public int getBooking_ID() {
+        return Booking_ID;
+    }
+
+    public void setBooking_ID(int booking_ID) {
+        Booking_ID = booking_ID;
+    }
+
+
 }

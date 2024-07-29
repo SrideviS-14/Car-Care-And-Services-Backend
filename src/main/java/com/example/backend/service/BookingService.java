@@ -1,21 +1,16 @@
 package com.example.backend.service;
-
-import com.example.backend.model.AppUser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.backend.model.Booking;
 import com.example.backend.model.BookingDto;
-import com.example.backend.model.Services;
 import com.example.backend.repository.BookingRepository;
 import com.example.backend.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -34,11 +29,12 @@ public class BookingService {
     }
 
     public Integer book(BookingDto bookingDto) {
+        Date date;
         Booking booking = new Booking();
-        booking.setService_Type(bookingDto.getService_Type());
         booking.setService_List(bookingDto.getService_List());
         booking.setPackage_Amount(bookingDto.getPackage_Amount());
-        booking.setActive(bookingDto.isActive());
+        booking.setDateOfBooking(java.sql.Date.valueOf(LocalDate.now()));
+        booking.setStatus("Confirmed");
         booking.setPaid(bookingDto.isPaid());
         booking.setUser_ID(bookingDto.getUser_ID());
         booking.setTime_Period_In_Days(bookingDto.getTime_Period_In_Days());
@@ -51,6 +47,31 @@ public class BookingService {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         booking.get().setPaid(true);
         bookingRepository.save(booking.orElse(null));
+        return "Changed Successfully";
+    }
+
+    public Iterable<Booking> getAllBookingsOfUser() {
+        List<Booking> bookings = bookingRepository.findAll();
+        List<Booking> result = new java.util.ArrayList<>(List.of());
+        int userID = cartService.getUserIdFromToken();
+        for(Booking booking: bookings) {
+            if(booking.getUser_ID() == userID) {
+                result.add(booking);
+            }
+        }
+        return result;
+    }
+
+    public String updateBookingStatus(int bookingId, String value) {
+        Optional<Booking> booking = bookingRepository.findById(bookingId);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String parsedValue = mapper.readValue(value, String.class);
+            booking.get().setStatus(parsedValue);
+            bookingRepository.save(booking.orElse(null));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "Changed Successfully";
     }
 }

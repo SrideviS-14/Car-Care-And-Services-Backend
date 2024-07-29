@@ -23,12 +23,21 @@ public class BookingController {
 
     @PostMapping("/book")
     public Integer book(@RequestBody BookingDto bookingDto) {
-        System.out.println(bookingDto.getService_Type());
         return bookingService.book(bookingDto);
     }
 
     @PutMapping("/updateBookingPayment/{booking_ID}")
     public String updateBookingPayment(@PathVariable int booking_ID){
         return bookingService.updateBookingPayment(booking_ID);
+    }
+
+    @PutMapping("/updateBookingStatus/{booking_ID}")
+    public String updateBookingStatus(@PathVariable int booking_ID, @RequestBody String value){
+        return bookingService.updateBookingStatus(booking_ID, value);
+    }
+
+    @GetMapping("/getBookingsOfUser")
+    public Iterable<Booking> getAllBookingsOfUser() {
+        return bookingService.getAllBookingsOfUser();
     }
 }

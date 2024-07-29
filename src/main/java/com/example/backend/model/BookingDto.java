@@ -11,9 +11,6 @@ import java.sql.Date;
 
 public class BookingDto {
 
-    @JsonProperty("Service_Type")
-    private String Service_Type;
-
     @JsonProperty("Service_List")
     private String Service_List;
 
@@ -29,8 +26,11 @@ public class BookingDto {
     @JsonProperty("Paid")
     private boolean Paid;
 
-    @JsonProperty("IsActive")
-    private boolean IsActive;
+    @JsonProperty("DateOfBooking")
+    private Date DateOfBooking;
+
+    @JsonProperty("Status")
+    private String Status;
 
     public int getUser_ID() {
         return User_ID;
@@ -38,14 +38,6 @@ public class BookingDto {
 
     public void setUser_ID(int user_ID) {
         User_ID = user_ID;
-    }
-
-    public String getService_Type() {
-        return Service_Type;
-    }
-
-    public void setService_Type(String service_Type) {
-        Service_Type = service_Type;
     }
 
     public String getService_List() {
@@ -81,11 +73,19 @@ public class BookingDto {
         Paid = paid;
     }
 
-    public boolean isActive() {
-        return IsActive;
+    public Date getDateOfBooking() {
+        return DateOfBooking;
     }
 
-    public void setActive(boolean active) {
-        IsActive = active;
+    public void setDateOfBooking(Date dateOfBooking) {
+        DateOfBooking = dateOfBooking;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 }

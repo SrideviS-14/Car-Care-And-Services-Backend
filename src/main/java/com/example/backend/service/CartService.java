@@ -1,15 +1,12 @@
 package com.example.backend.service;
 
 import com.example.backend.model.AppUser;
-import com.example.backend.model.Packages;
 import com.example.backend.model.Services;
 import com.example.backend.repository.AppUserRepository;
-import com.example.backend.repository.PackageRepository;
 import com.example.backend.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.*;
@@ -19,9 +16,6 @@ public class CartService {
 
     @Autowired
     ServiceRepository serviceRepository;
-
-    @Autowired
-    PackageRepository packageRepository;
 
     @Autowired
     AppUserRepository appUserRepository;

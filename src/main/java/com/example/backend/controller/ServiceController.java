@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Services;
+import com.example.backend.repository.ServiceRepository;
 import com.example.backend.service.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ public class ServiceController {
     @Autowired
     ServiceService serviceService;
 
+    @Autowired
+    ServiceRepository serviceRepository;
+
     @GetMapping("/getAllServicesAndPackages")
     public Iterable<Services> getAllServicesAndPackages() {
         return serviceService.getAllServicesAndPackages();
@@ -32,9 +36,10 @@ public class ServiceController {
         return serviceService.addService(service);
     }
 
-    @DeleteMapping("/deleteService/{service_ID}")
-    public Iterable<Services> deleteService(@PathVariable Integer service_id) {
-        return serviceService.deleteService(service_id);
+    @DeleteMapping("/deleteService/{serviceId}")
+    public Iterable<Services> deleteService(@PathVariable Integer serviceId) {
+        serviceRepository.deleteById(serviceId);
+        return serviceRepository.findAll();
     }
 
     @PutMapping("/updateService")

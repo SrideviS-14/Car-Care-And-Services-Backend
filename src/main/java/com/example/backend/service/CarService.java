@@ -25,7 +25,7 @@ public class CarService {
 
     public Iterable<Car> getCarDetails(int userID) {
         List<Car> cars = carRepository.findAll();
-        List<Car> result = List.of();
+        List<Car> result = new ArrayList<>(List.of());
         for(Car car: cars)
         {
             if(car.getAppUser().getId() == userID)
@@ -33,6 +33,7 @@ public class CarService {
                 result.add(car);
             }
         }
+        System.out.println(result);
         return result;
     }
 }
