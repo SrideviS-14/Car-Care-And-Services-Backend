@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.model.AdminBookingDto;
 import com.example.backend.model.Booking;
 import com.example.backend.model.BookingDto;
 import com.example.backend.service.BookingService;
@@ -39,5 +40,11 @@ public class BookingController {
     @GetMapping("/getBookingsOfUser")
     public Iterable<Booking> getAllBookingsOfUser() {
         return bookingService.getAllBookingsOfUser();
+    }
+
+    @PostMapping("/addBookingAdmin")
+    public String addBookingAdmin(@RequestBody AdminBookingDto adminBookingDto)
+    {
+        return bookingService.addBookingAdmin(adminBookingDto);
     }
 }

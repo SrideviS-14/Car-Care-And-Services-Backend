@@ -1,4 +1,5 @@
 package com.example.backend.service;
+import com.example.backend.model.AdminBookingDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.backend.model.Booking;
 import com.example.backend.model.BookingDto;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -25,7 +27,15 @@ public class BookingService {
     CartService cartService;
 
     public Iterable<Booking> getAllBookings() {
-        return bookingRepository.findAll();
+        List<Booking> bookings = bookingRepository.findAll();
+        List<Booking> result = new java.util.ArrayList<>(List.of());
+        int userID = cartService.getUserIdFromToken();
+        for(Booking booking: bookings) {
+                if(!Objects.equals(booking.getStatus(), "completed")) {
+                    result.add(booking);
+                }
+        }
+        return result;
     }
 
     public Integer book(BookingDto bookingDto) {
@@ -56,7 +66,9 @@ public class BookingService {
         int userID = cartService.getUserIdFromToken();
         for(Booking booking: bookings) {
             if(booking.getUser_ID() == userID) {
-                result.add(booking);
+                if(!Objects.equals(booking.getStatus(), "completed")) {
+                    result.add(booking);
+                }
             }
         }
         return result;
@@ -73,5 +85,9 @@ public class BookingService {
             e.printStackTrace();
         }
         return "Changed Successfully";
+    }
+
+    public String addBookingAdmin(AdminBookingDto adminBookingDto) {
+        return "Completed successfuly";
     }
 }

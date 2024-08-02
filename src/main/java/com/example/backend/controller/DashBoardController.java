@@ -63,7 +63,7 @@ public class DashBoardController {
             {
                 countClassic++;
             }
-            else if(Objects.equals(booking.getService_List(), "11"))
+            else if(Objects.equals(booking.getService_List(), "17"))
             {
                 countPremium++;
             }
