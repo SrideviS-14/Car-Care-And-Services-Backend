@@ -22,7 +22,6 @@ public class PackageController {
         return  packageService.getAllPackages();
     }
 
-
     @PostMapping("/buyPackage")
     public String buyPackage(@RequestBody int packageID) {
         return cartService.buyPackage(packageID);

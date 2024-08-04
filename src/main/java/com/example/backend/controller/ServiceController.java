@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.model.Packages;
 import com.example.backend.model.Services;
 import com.example.backend.repository.ServiceRepository;
 import com.example.backend.service.ServiceService;
@@ -8,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/service")
@@ -50,5 +53,10 @@ public class ServiceController {
     @GetMapping("/getAllPackages")
     public Iterable<Services> getAllPackages() {
         return serviceService.getAllPackages();
+    }
+
+    @GetMapping("getAllPackagesWithOffers")
+    public Map<Integer, BigDecimal> getAllPackagesWithOffers() {
+        return serviceService.getAllPackagesWithOffers();
     }
 }
