@@ -32,6 +32,17 @@ public class BookingDto {
     @JsonProperty("Status")
     private String Status;
 
+    @JsonProperty("car_ID")
+    private int car_ID;
+
+    public int getCar_ID() {
+        return car_ID;
+    }
+
+    public void setCar_ID(int car_ID) {
+        this.car_ID = car_ID;
+    }
+
     public int getUser_ID() {
         return User_ID;
     }

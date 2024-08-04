@@ -18,7 +18,7 @@ public class CarController {
     CartService cartService;
 
     @PostMapping("/addCarDetails")
-    public Iterable<Car> addCarDetails(@RequestBody Car car)
+    public Car addCarDetails(@RequestBody Car car)
     {
         return carService.addCarDetails(car);
     }

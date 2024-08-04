@@ -47,4 +47,10 @@ public class BookingController {
     {
         return bookingService.addBookingAdmin(adminBookingDto);
     }
+
+    @PutMapping("/cancelBooking")
+    public String cancelBooking(@RequestBody int booking_ID)
+    {
+        return bookingService.cancelBooking(booking_ID);
+    }
 }

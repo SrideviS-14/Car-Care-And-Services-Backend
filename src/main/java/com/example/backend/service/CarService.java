@@ -16,11 +16,10 @@ public class CarService {
     @Autowired
     AppUserRepository appUserRepository;
 
-    public Iterable<Car> addCarDetails(Car car) {
+    public Car addCarDetails(Car car) {
         AppUser appUser = appUserRepository.findById(car.getAppUser().getId()).orElseThrow(() -> new RuntimeException("User not found"));
         car.setAppUser(appUser);
-        carRepository.save(car);
-        return carRepository.findAll();
+        return carRepository.save(car);
     }
 
     public Iterable<Car> getCarDetails(int userID) {

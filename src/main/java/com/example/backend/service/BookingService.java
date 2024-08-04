@@ -29,9 +29,8 @@ public class BookingService {
     public Iterable<Booking> getAllBookings() {
         List<Booking> bookings = bookingRepository.findAll();
         List<Booking> result = new java.util.ArrayList<>(List.of());
-        int userID = cartService.getUserIdFromToken();
         for(Booking booking: bookings) {
-                if(!Objects.equals(booking.getStatus(), "completed")) {
+                if(!Objects.equals(booking.getStatus(), "completed") && !Objects.equals(booking.getStatus(), "cancelled" )) {
                     result.add(booking);
                 }
         }
@@ -44,10 +43,11 @@ public class BookingService {
         booking.setService_List(bookingDto.getService_List());
         booking.setPackage_Amount(bookingDto.getPackage_Amount());
         booking.setDateOfBooking(java.sql.Date.valueOf(LocalDate.now()));
-        booking.setStatus("Confirmed");
+        booking.setStatus("confirmed");
         booking.setPaid(bookingDto.isPaid());
         booking.setUser_ID(bookingDto.getUser_ID());
         booking.setTime_Period_In_Days(bookingDto.getTime_Period_In_Days());
+        booking.setCar_ID(bookingDto.getCar_ID());
         bookingRepository.save(booking);
         cartService.emptyCart(bookingDto.getUser_ID());
         return booking.getBooking_ID();
@@ -66,8 +66,9 @@ public class BookingService {
         int userID = cartService.getUserIdFromToken();
         for(Booking booking: bookings) {
             if(booking.getUser_ID() == userID) {
-                if(!Objects.equals(booking.getStatus(), "completed")) {
+                if(!Objects.equals(booking.getStatus(), "completed") && !Objects.equals(booking.getStatus(), "cancelled" )) {
                     result.add(booking);
+                    System.out.println(booking.getStatus());
                 }
             }
         }
@@ -89,5 +90,12 @@ public class BookingService {
 
     public String addBookingAdmin(AdminBookingDto adminBookingDto) {
         return "Completed successfuly";
+    }
+
+    public String cancelBooking(int bookingId) {
+        Optional<Booking> booking = bookingRepository.findById(bookingId);
+        booking.get().setStatus("cancelled");
+        bookingRepository.save(booking.orElse(null));
+        return "Cancelled booking";
     }
 }

@@ -1,14 +1,13 @@
 package com.example.backend.controller;
 
-import com.example.backend.model.AppUser;
-import com.example.backend.model.LoginDto;
-import com.example.backend.model.RegisterDto;
+import com.example.backend.model.*;
 import com.example.backend.repository.AppUserRepository;
 import com.example.backend.service.EmailService;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +19,7 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
@@ -168,4 +168,34 @@ public class AccountController {
     public Iterable<AppUser> getAllUsers() {
         return appUserRepository.findAll();
     }
+
+    @PostMapping("/isAUser")
+    public ResponseEntity<Object> isAUser(@RequestBody AdminBookingUserDto adminBookingUserDto) {
+        // Validate adminBookingUserDto before making the request
+        Iterable<AppUser> users = appUserRepository.findAll();
+        for(AppUser appUser: users) {
+            if(appUser.getEmail().equals(adminBookingUserDto.getEmail())) {
+                return ResponseEntity.ok(appUser);
+            }
+        }
+        RegisterDto registerDto = new RegisterDto();
+        registerDto.setEmail(adminBookingUserDto.getEmail());
+        registerDto.setPassword("default@123");
+        registerDto.setUserName(adminBookingUserDto.getUserName());
+        registerDto.setPhoneNumber(adminBookingUserDto.getPhoneNumber());
+
+        // Create a DataBinder to get a BindingResult for validation
+        DataBinder dataBinder = new DataBinder(registerDto);
+        dataBinder.validate();
+        BindingResult bindingResult = dataBinder.getBindingResult();
+
+        ResponseEntity<Object> response = register(registerDto, bindingResult);
+        if(response.getStatusCode().is2xxSuccessful()) {
+            AppUser newUser = appUserRepository.findByUserName(registerDto.getUserName());
+            return ResponseEntity.ok(newUser);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding user");
+        }
+    }
+
 }

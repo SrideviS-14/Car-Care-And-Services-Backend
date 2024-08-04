@@ -26,6 +26,17 @@ public class Services
     @Column(name="IsService")
     private boolean IsService;
 
+    @Column(name="TimePeriod")
+    private int TimePeriod;
+
+    public int getTimePeriod() {
+        return TimePeriod;
+    }
+
+    public void setTimePeriod(int timePeriod) {
+        TimePeriod = timePeriod;
+    }
+
     public int getService_ID() {
         return Service_ID;
     }
