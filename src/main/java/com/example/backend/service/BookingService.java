@@ -98,4 +98,16 @@ public class BookingService {
         bookingRepository.save(booking.orElse(null));
         return "Cancelled booking";
     }
+
+    public Iterable<Booking> getAllBookingsOfUserAll() {
+        List<Booking> bookings = bookingRepository.findAll();
+        List<Booking> result = new java.util.ArrayList<>(List.of());
+        int userID = cartService.getUserIdFromToken();
+        for(Booking booking: bookings) {
+            if(booking.getUser_ID() == userID) {
+                    result.add(booking);
+                }
+        }
+        return result;
+    }
 }

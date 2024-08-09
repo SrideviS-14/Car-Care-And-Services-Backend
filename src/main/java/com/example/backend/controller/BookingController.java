@@ -53,4 +53,9 @@ public class BookingController {
     {
         return bookingService.cancelBooking(booking_ID);
     }
+
+    @GetMapping("/getBookingsOfUserAll")
+    public Iterable<Booking> getAllBookingsOfUserAll() {
+        return bookingService.getAllBookingsOfUserAll();
+    }
 }
